@@ -1,6 +1,7 @@
 package com.tutorial.mario.entity;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import com.tutorial.mario.Handler;
 import com.tutorial.mario.Id;
@@ -11,10 +12,14 @@ public abstract class Entity {
 	public int width, height;
 	
 	public boolean solid;
+	public boolean jumping = false;
+	public boolean falling = true;
 	
 	public int velX, velY;
 	
 	public Id id;
+	
+	public double gravity = 0.0;
 	
 	public Handler handler;
 	
@@ -65,5 +70,25 @@ public abstract class Entity {
 
 	public void setVelY(int velY) {
 		this.velY = velY;
+	}
+	
+	public Rectangle getBounds() {
+		return new Rectangle(getX(), getY(), width, height);
+	}
+	
+	public Rectangle getBoundsTop() {
+		return new Rectangle(getX()+10, getY(), width-20, 5);
+	}
+	
+	public Rectangle getBoundsBottom() {
+		return new Rectangle(getX()+10, getY()+height-5, width-20, 5);
+	}
+	
+	public Rectangle getBoundsLeft() {
+		return new Rectangle(getX(), getY()+10, 5, height-20);
+	}
+	
+	public Rectangle getBoundsRight() {
+		return new Rectangle(getX()+width-5, getY()+10, 5, height - 20);
 	}
 }

@@ -6,12 +6,12 @@ import java.awt.image.BufferStrategy;
 import java.awt.Canvas;
 import java.awt.Color;
 
+import com.tutorial.mario.entity.Entity;
 import com.tutorial.mario.entity.Player;
 import com.tutorial.mario.input.KeyInput;
+import com.tutorial.mario.tile.Wall;
 
 import javax.swing.JFrame;
-
-
 
 public class Game extends Canvas implements Runnable {
 	
@@ -24,6 +24,7 @@ public class Game extends Canvas implements Runnable {
 	private boolean running = false;
 	
 	public static Handler handler;
+	public static Camera cam;
 	
 	public Game() {
 		Dimension size = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
@@ -34,10 +35,11 @@ public class Game extends Canvas implements Runnable {
 	
 	private void init() {
 		handler = new Handler();
+		cam = new Camera();
 		
 		addKeyListener(new KeyInput());
 		
-		handler.addEntity(new Player(200, 200, 64, 64, true, Id.player, handler));   // player size (int x, int y, int width, int height, boolean solid, Id id, Handler handler)
+		handler.addEntity(new Player(300, 512, 64, 64, true, Id.player, handler));   //  (spawn x, spawn y, player width, player height, boolean solid, Id id, Handler handler) 
 	}
 	
 	private synchronized void start() {
@@ -97,6 +99,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
+		g.translate(cam.getX(), cam.getY());
 		handler.render(g);
 		g.dispose();
 		bs.show();
@@ -104,6 +107,19 @@ public class Game extends Canvas implements Runnable {
 	
 	public void tick() {
 		handler.tick();
+		for (Entity e: handler.entity) {
+			if (e.getId() == Id.player) {
+				cam.tick(e);
+			}
+		}
+	}
+	
+	public int getFrameWidth() {
+		return WIDTH * SCALE;
+	}
+	
+	public int getFrameHEight() {
+		return HEIGHT * SCALE;
 	}
 	
 	public static void main(String[] args) {

@@ -1,5 +1,5 @@
 package com.tutorial.mario;
 
 public enum Id {
-	player;
+	player, wall;
 }
